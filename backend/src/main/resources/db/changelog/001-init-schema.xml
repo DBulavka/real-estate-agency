@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd">
+
+    <changeSet id="001-1" author="codex">
+        <createTable tableName="agency_users">
+            <column name="id" type="BIGSERIAL"><constraints primaryKey="true" nullable="false"/></column>
+            <column name="created_at" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="updated_at" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="email" type="VARCHAR(255)"><constraints nullable="false" unique="true"/></column>
+            <column name="full_name" type="VARCHAR(255)"><constraints nullable="false"/></column>
+            <column name="role" type="VARCHAR(64)"><constraints nullable="false"/></column>
+            <column name="phone" type="VARCHAR(50)"/>
+            <column name="active" type="BOOLEAN" defaultValueBoolean="true"><constraints nullable="false"/></column>
+        </createTable>
+
+        <createTable tableName="clients">
+            <column name="id" type="BIGSERIAL"><constraints primaryKey="true" nullable="false"/></column>
+            <column name="created_at" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="updated_at" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="full_name" type="VARCHAR(255)"><constraints nullable="false"/></column>
+            <column name="email" type="VARCHAR(255)"><constraints nullable="false" unique="true"/></column>
+            <column name="phone" type="VARCHAR(50)"/>
+            <column name="type" type="VARCHAR(64)"><constraints nullable="false"/></column>
+            <column name="budget_range" type="VARCHAR(255)"/>
+            <column name="assigned_agent_id" type="BIGINT"/>
+        </createTable>
+
+        <createTable tableName="properties">
+            <column name="id" type="BIGSERIAL"><constraints primaryKey="true" nullable="false"/></column>
+            <column name="created_at" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="updated_at" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="title" type="VARCHAR(255)"><constraints nullable="false"/></column>
+            <column name="type" type="VARCHAR(64)"><constraints nullable="false"/></column>
+            <column name="status" type="VARCHAR(64)"><constraints nullable="false"/></column>
+            <column name="address" type="VARCHAR(255)"><constraints nullable="false"/></column>
+            <column name="price" type="DECIMAL(18,2)"><constraints nullable="false"/></column>
+            <column name="area" type="DOUBLE PRECISION"/>
+            <column name="rooms" type="INT"/>
+            <column name="owner_id" type="BIGINT"/>
+        </createTable>
+
+        <createTable tableName="viewings">
+            <column name="id" type="BIGSERIAL"><constraints primaryKey="true" nullable="false"/></column>
+            <column name="created_at" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="updated_at" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="property_id" type="BIGINT"/>
+            <column name="client_id" type="BIGINT"/>
+            <column name="agent_id" type="BIGINT"/>
+            <column name="scheduled_at" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="status" type="VARCHAR(64)"/>
+            <column name="notes" type="VARCHAR(500)"/>
+        </createTable>
+
+        <createTable tableName="offers">
+            <column name="id" type="BIGSERIAL"><constraints primaryKey="true" nullable="false"/></column>
+            <column name="created_at" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="updated_at" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="property_id" type="BIGINT"/>
+            <column name="client_id" type="BIGINT"/>
+            <column name="amount" type="DECIMAL(18,2)"><constraints nullable="false"/></column>
+            <column name="status" type="VARCHAR(64)"><constraints nullable="false"/></column>
+            <column name="comment" type="VARCHAR(500)"/>
+        </createTable>
+
+        <createTable tableName="deals">
+            <column name="id" type="BIGSERIAL"><constraints primaryKey="true" nullable="false"/></column>
+            <column name="created_at" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="updated_at" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="property_id" type="BIGINT"/>
+            <column name="client_id" type="BIGINT"/>
+            <column name="agent_id" type="BIGINT"/>
+            <column name="type" type="VARCHAR(64)"/>
+            <column name="status" type="VARCHAR(64)"/>
+            <column name="agreed_price" type="DECIMAL(18,2)"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="clients" baseColumnNames="assigned_agent_id"
+                                 referencedTableName="agency_users" referencedColumnNames="id"
+                                 constraintName="fk_clients_agent"/>
+        <addForeignKeyConstraint baseTableName="properties" baseColumnNames="owner_id"
+                                 referencedTableName="clients" referencedColumnNames="id"
+                                 constraintName="fk_properties_owner"/>
+        <addForeignKeyConstraint baseTableName="viewings" baseColumnNames="property_id"
+                                 referencedTableName="properties" referencedColumnNames="id"
+                                 constraintName="fk_viewings_property"/>
+        <addForeignKeyConstraint baseTableName="viewings" baseColumnNames="client_id"
+                                 referencedTableName="clients" referencedColumnNames="id"
+                                 constraintName="fk_viewings_client"/>
+        <addForeignKeyConstraint baseTableName="viewings" baseColumnNames="agent_id"
+                                 referencedTableName="agency_users" referencedColumnNames="id"
+                                 constraintName="fk_viewings_agent"/>
+        <addForeignKeyConstraint baseTableName="offers" baseColumnNames="property_id"
+                                 referencedTableName="properties" referencedColumnNames="id"
+                                 constraintName="fk_offers_property"/>
+        <addForeignKeyConstraint baseTableName="offers" baseColumnNames="client_id"
+                                 referencedTableName="clients" referencedColumnNames="id"
+                                 constraintName="fk_offers_client"/>
+        <addForeignKeyConstraint baseTableName="deals" baseColumnNames="property_id"
+                                 referencedTableName="properties" referencedColumnNames="id"
+                                 constraintName="fk_deals_property"/>
+        <addForeignKeyConstraint baseTableName="deals" baseColumnNames="client_id"
+                                 referencedTableName="clients" referencedColumnNames="id"
+                                 constraintName="fk_deals_client"/>
+        <addForeignKeyConstraint baseTableName="deals" baseColumnNames="agent_id"
+                                 referencedTableName="agency_users" referencedColumnNames="id"
+                                 constraintName="fk_deals_agent"/>
+    </changeSet>
+</databaseChangeLog>
