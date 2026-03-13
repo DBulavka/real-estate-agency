@@ -1,1 +1,5 @@
-export interface User { id?: number; [key: string]: unknown; }
+export interface User {
+    id?: number;
+
+    [key: string]: unknown;
+}

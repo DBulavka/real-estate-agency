@@ -1,1 +1,5 @@
-export interface Deal { id?: number; [key: string]: unknown; }
+export interface Deal {
+    id?: number;
+
+    [key: string]: unknown;
+}

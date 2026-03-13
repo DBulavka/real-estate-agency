@@ -1,1 +1,5 @@
-export interface Property { id?: number; [key: string]: unknown; }
+export interface Property {
+    id?: number;
+
+    [key: string]: unknown;
+}

@@ -1,1 +1,5 @@
-export interface Client { id?: number; [key: string]: unknown; }
+export interface Client {
+    id?: number;
+
+    [key: string]: unknown;
+}

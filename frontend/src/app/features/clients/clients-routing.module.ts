@@ -1,13 +1,14 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { ClientListComponent } from './clients-list.component';
-import { ClientFormComponent } from './clients-form.component';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {ClientListComponent} from './clients-list.component';
+import {ClientFormComponent} from './clients-form.component';
 
 const routes: Routes = [
-  { path: '', component: ClientListComponent },
-  { path: 'new', component: ClientFormComponent },
-  { path: ':id', component: ClientFormComponent }
+    {path: '', component: ClientListComponent},
+    {path: 'new', component: ClientFormComponent},
+    {path: ':id', component: ClientFormComponent}
 ];
 
-@NgModule({ imports: [RouterModule.forChild(routes)], exports: [RouterModule] })
-export class ClientsRoutingModule {}
+@NgModule({imports: [RouterModule.forChild(routes)], exports: [RouterModule]})
+export class ClientsRoutingModule {
+}

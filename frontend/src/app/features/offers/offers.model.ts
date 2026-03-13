@@ -1,1 +1,5 @@
-export interface Offer { id?: number; [key: string]: unknown; }
+export interface Offer {
+    id?: number;
+
+    [key: string]: unknown;
+}
